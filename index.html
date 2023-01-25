@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hannah's Stretching Timer</title>
+</head>
+<body>
+	<h1>Stretching Timer</h1>
+
+	<form id="timeform">
+		<label for="stretch">How many seconds do you want each stretch to be?  </label>
+		<input type="number" id="stretch" min="5" name="stretch" placeholder="40"><br><br>
+		<label for="switch">How many seconds do you need to switch to the next position?  </label>
+		<input type="number" id="switch" min="1" name="switch"><br><br>
+
+		<input type="button" onclick="startCount()" value="START">
+		<input type="button" onclick="stopCount()" value="STOP">
+	</form>
+
+
+	<h2 id="prompt"></h2>
+
+</body>
+
+
+
+<script type="text/javascript">
+let stopbtn = true
+
+	function myDisplayer(some) {
+		document.getElementById("prompt").innerHTML = some;
+	}
+
+	function displayPromises(resolves, rejects) {
+		let myPromise = new Promise(function(myResolve, myReject) {
+			let x = 0;
+
+			if (x ==0) {
+				myResolve(resolves);
+			} else {
+				myReject(rejects);
+			}
+		});
+
+		myPromise.then(
+			function(value) {myDisplayer(value);},
+			function(error) {myDisplayer(error);}
+		);
+	}
+
+	function playGong() {
+		let gong = new Audio('gong.mp3');
+		gong.play();
+	}
+
+	function playSparkle() {
+		let sparkle = new Audio('sparkle.mp3');
+		sparkle.play();
+	}
+
+	async function alertSwitch() {
+		displayPromises("Time to switch!", "Error")
+		playSparkle()
+		// Sound Effect by <a href="https://pixabay.com/users/shidenbeatsmusic-25676252/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=115095">Shiden Beats Music</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=115095">Pixabay</a>
+	}
+
+	async function alertStretch() {
+		displayPromises("Stretch!", "Error")
+		playGong()
+		// Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=93480">Pixabay</a>
+	}
+
+	function sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	async function startCount() {
+		displayPromises("Get ready to start stretching", "Error")
+
+		while (stopbtn == true) {
+
+		let stretchTime = document.getElementById("stretch").value 
+		let switchTime = document.getElementById("switch").value 
+
+	        await sleep(switchTime * 1000)
+    		if (stopbtn == true) {
+    			console.log('Done switching');
+    			alertStretch();
+    		}
+   
+	    	await sleep(stretchTime * 1000)
+    		if (stopbtn == true) {
+				console.log('Done stretching');
+    			alertSwitch();
+    		}
+
+		} 
+	}
+
+	function stopCount() {
+		stopbtn = false
+		displayPromises("", "Error")
+	}
+
+
+// show placeholder
+// in javascript, assign a default value to stretchtime and switchtime should the inputs be empty. 
+
+
+</script>
+
+</html>
